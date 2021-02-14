@@ -34,32 +34,55 @@ export default {
   },
   methods: {
     // 登录请求
-    handleLogin () {
+    async handleLogin () {
+      // -> 希望 让异步操作的代码 看起来像同步代码(为什么：有嵌套关系，大括号就多，看起来就不舒服)
+      // -> ES7 async + await (需要用到)
       console.log(this.formdata)
       // axios#post(url[, data[, config]])
-      this.$http.post('login', this.formdata).then(response => {
-        // 登录成功     不成功
-        // 1. 跳转home  1. 提示消息(哪不对)
-        // 2. 提示成功
-        // console.log(response)
-        const {
-          data,
-          meta: { msg, status }
-        } = response.data
-        //  登录成功
-        if (status === 200) {
-          // 1. 跳转home
-          this.$router.push({ name: 'home' })
-          //  2. 提示成功
-          this.$message.success(msg)
-          console.log(data)
-        } else {
-          // 不成功
-          // 1. 提示消息(哪不对)
-          this.$message.warning(msg)
-          console.log(data)
-        }
-      })
+      const res = this.$http.post('login', this.formdata)
+      // console.log(response)
+      const {
+        data,
+        meta: { msg, status }
+      } = res.data
+      //  登录成功
+      if (status === 200) {
+        // 0. 保存token
+        localStorage.setItem('token', data.token)
+        // 1. 跳转home  js编程式导航
+        this.$router.push({ name: 'home' })
+        //  2. 提示成功
+        this.$message.success(msg)
+        console.log(data)
+      } else {
+        // 不成功
+        // 1. 提示消息(哪不对)
+        this.$message.warning(msg)
+        console.log(data)
+      }
+
+      // console.log(this.formdata)
+      // // axios#post(url[, data[, config]])
+      // this.$http.post('login', this.formdata).then(response => {
+      //   // console.log(response)
+      //   const {
+      //     data,
+      //     meta: { msg, status }
+      //   } = response.data
+      //   //  登录成功
+      //   if (status === 200) {
+      //     // 1. 跳转home  js编程式导航
+      //     this.$router.push({ name: 'home' })
+      //     //  2. 提示成功
+      //     this.$message.success(msg)
+      //     console.log(data)
+      //   } else {
+      //     // 不成功
+      //     // 1. 提示消息(哪不对)
+      //     this.$message.warning(msg)
+      //     console.log(data)
+      //   }
+      // })
     }
   }
 }
