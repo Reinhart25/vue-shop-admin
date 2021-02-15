@@ -47,7 +47,8 @@ export default {
       } = res.data
       //  登录成功
       if (status === 200) {
-        // 0. 保存token
+        // 0. 保存token -> 目的：如果用户没登录 -> url 直接来到home 组件
+        // 在登录成功时， 保存正确用户的token
         localStorage.setItem('token', data.token)
         // 1. 跳转home  js编程式导航
         this.$router.push({ name: 'home' })
