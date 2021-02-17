@@ -39,7 +39,7 @@ export default {
       // -> ES7 async + await (需要用到)
       console.log(this.formdata)
       // axios#post(url[, data[, config]])
-      const res = this.$http.post('login', this.formdata)
+      const res = await this.$http.post('login', this.formdata)
       // console.log(response)
       const {
         data,

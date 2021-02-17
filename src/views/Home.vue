@@ -12,7 +12,9 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
-            <a href="#" class="login-out" @click.prevent="handleSignout()">退出</a>
+            <a href="#" class="login-out" @click.prevent="handleSignout()"
+              >退出</a
+            >
           </div>
         </el-col>
       </el-row>
@@ -20,12 +22,10 @@
     <el-container>
       <el-aside class="aside" width="200px">
         <el-menu
-          router="true"
-          unique-opened="true"
+          router
+          unique-opened
           default-active="2"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
@@ -113,13 +113,13 @@ export default {
   // if token 有 -> 继续渲染组件
   // token 没有 -> 登陆
   // new Vue 之前自动触发
-  // beforeCreate () {
-  //   const token = localStorage.getItem('token')
-  //   if (!token) {
-  //     // token 没有 -> 登陆
-  //     this.$router.push({ name: 'login' })
-  //   }
-  // },
+  beforeCreate () {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      // token 没有 -> 登陆
+      this.$router.push({ name: 'login' })
+    }
+  },
   methods: {
     handleSignout () {
       // 1. 清除token
