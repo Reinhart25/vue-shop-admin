@@ -48,19 +48,20 @@
             v-model="scope.row.mg_state"
             active-color="#13ce66"
             inactive-color="#ff4949"
+            @change="changeMgState(scope.row)"
           >
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作">
-        <template>
-          <!-- slot-scope="scope" -->
+        <template slot-scope="scope">
           <el-button
             type="primary"
             icon="el-icon-edit"
             circle
             size="small"
             plain
+            @click="showeEditUserDia(scope.row)"
           ></el-button>
           <el-button
             type="success"
@@ -68,6 +69,7 @@
             circle
             size="small"
             plain
+            @click="showSetUserRoleDia(scope.row)"
           ></el-button>
           <el-button
             type="danger"
@@ -75,6 +77,7 @@
             circle
             size="small"
             plain
+            @click="showDeleteMsgBox(scope.row.id)"
           ></el-button>
         </template>
       </el-table-column>
@@ -90,7 +93,7 @@
       :total="total"
     >
     </el-pagination>
-    <!-- 对话框 -->
+    <!-- 弹出对话框 -->
     <!-- 添加用户的对话框 -->
     <el-dialog title="添加用户" :visible.sync="dialogFormVisibleAdd">
       <el-form :model="form">
@@ -114,6 +117,53 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <!-- 编辑用户的对话框 -->
+    <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
+      <el-form :model="form">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input
+            disabled
+            v-model="form.username"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" :label-width="formLabelWidth">
+          <el-input v-model="form.mobile" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleEdit = false">取 消</el-button>
+        <el-button type="primary" @click="editUser">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 分配角色的对话框 -->
+    <el-dialog title="分配角色" :visible.sync="dialogFormVisibleRole">
+      <el-form :model="form">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          {{ "当前用户的用户名" }}
+        </el-form-item>
+        <el-form-item label="角色" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="请选择" value="-1"></el-option>
+            <el-option label="角色名称" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
+
   </el-card>
 </template>
 
@@ -124,8 +174,10 @@ export default {
     return {
       // 添加用户的对话框 输入框的宽度
       formLabelWidth: '100px',
-      // 控制添加用户的对话框
+      // 控制添加 编辑 用户的对话框的属性
       dialogFormVisibleAdd: false,
+      dialogFormVisibleEdit: false,
+      dialogFormVisibleRole: false,
       // 添加用户的form数据
       // username用户名称不能为空 password用户密码不能为空 email邮箱可以为空 mobile手机号可以为空
       form: {
@@ -154,6 +206,64 @@ export default {
     this.getUserList()
   },
   methods: {
+    // 分配角色-打开对话框
+    showSetUserRoleDia () {},
+    // 开关修改用户状态 scope.row代表当前用户 v-model视图改变数据改变
+    async changeMgState (user) {
+      // 发送请求 users/:uId/state/:type
+      const res = await this.$http.put(
+        `users/${user.id}/state/${user.mg_state}`
+      )
+      console.log(res)
+    },
+    // 编辑用户-发送请求
+    async editUser () {
+      // users/:id
+      const res = await this.$http.put(`users/${this.form.id}`, this.form)
+      console.log(res)
+      // 1. 关闭对话框
+      this.dialogFormVisibleEdit = false
+      // 2. 更新视图
+      this.getUserList()
+    },
+    // 编辑用户-显示对话框
+    showeEditUserDia (user) {
+      // 2.获取用户数据
+      console.log(user)
+      this.form = user
+      this.dialogFormVisibleEdit = true
+    },
+    // 删除用户-打开消息盒子
+    showDeleteMsgBox (userId) {
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        // 注意： async 写在await 最近的参数
+        .then(async () => {
+          // 发送删除的请求:id ---> 用户id
+          // 1. data 中找userId
+          // 2. 把userId 以 showDeleteMsgBox 参数形式传进来
+          const res = await this.$http.delete(`users/${userId}`)
+          console.log(res)
+          if (res.data.meta.status === 200) {
+            // 1. 提示成功
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            // 2. 更新视图
+            this.getUserList()
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
     // 添加用户-发送请求
     async addUser () {
       // 2. 关闭对话框
@@ -165,7 +275,7 @@ export default {
       } = res.data
       console.log(data)
       if (status === 201) {
-        // 1. 提示成功
+        // 1. 提示成功 注意：这里是201
         this.$message.success(msg)
         // 3. 更新视图
         this.getUserList()
@@ -182,6 +292,8 @@ export default {
     },
     // 添加用户-显示对话框
     showAddUserDia () {
+      // 清空form
+      this.form = {}
       this.dialogFormVisibleAdd = true
     },
     // 清空搜索框 重新获取数据
