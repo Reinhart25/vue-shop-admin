@@ -145,25 +145,29 @@
 
     <!-- 分配角色的对话框 -->
     <el-dialog title="分配角色" :visible.sync="dialogFormVisibleRole">
-      <el-form :model="form">
+      <el-form>
         <el-form-item label="用户名" :label-width="formLabelWidth">
-          {{ "当前用户的用户名" }}
+          {{ currentUsername }}
         </el-form-item>
         <el-form-item label="角色" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="请选择" value="-1"></el-option>
-            <el-option label="角色名称" value="beijing"></el-option>
+          {{ currentRoleId }}
+          <!-- 如果select 的绑定的数据的值 和 option 的value一样，就会显示该option 的label值 -->
+          <el-select v-model="currentRoleId" placeholder="请选择角色">
+            <el-option label="请选择" :value="-1"></el-option>
+            <el-option
+              :label="item.roleName"
+              :value="item.id"
+              v-for="(item, i) in roles"
+              :key="i"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
+        <el-button type="primary" @click="setRole">确 定</el-button>
       </div>
     </el-dialog>
-
   </el-card>
 </template>
 
@@ -172,9 +176,15 @@ export default {
   name: 'users',
   data () {
     return {
+      // 分配角色 初始值
+      currentRoleId: -1,
+      currentUsername: '',
+      currentUserId: -1,
+      // 保存所有的角色数据
+      roles: [],
       // 添加用户的对话框 输入框的宽度
       formLabelWidth: '100px',
-      // 控制添加 编辑 用户的对话框的属性
+      // 控制添加 编辑 用户的对话框的属性 默认一开始是不打开
       dialogFormVisibleAdd: false,
       dialogFormVisibleEdit: false,
       dialogFormVisibleRole: false,
@@ -206,9 +216,34 @@ export default {
     this.getUserList()
   },
   methods: {
+    // 分配角色- 发送请求
+    async setRole () {
+      // users/:id/role
+      // id: 要修改的用户的id
+      // 请求体中 rid修改的新值角色id
+      const res = await this.$http.put(`users/${this.currentUserId}/role`, {
+        rid: this.currentRoleId
+      })
+      console.log(res)
+      // 关闭对话框
+      this.dialogFormVisibleRole = false
+    },
     // 分配角色-打开对话框
-    showSetUserRoleDia () {},
-    // 开关修改用户状态 scope.row代表当前用户 v-model视图改变数据改变
+    async showSetUserRoleDia (user) {
+      this.currentUserId = user.id
+      this.currentUsername = user.username
+      // 2. 获取所有的角色名字
+      const res1 = await this.$http.get('roles')
+      // console.log(res1)
+      this.roles = res1.data.data
+      // 1.  获取当前用户的角色id
+      const res = await this.$http.get(`users/${user.id}`)
+      console.log(res)
+      // 接口文档的key名 是role_id 其实是rid
+      this.currentRoleId = res.data.data.rid
+      this.dialogFormVisibleRole = true
+    },
+    // 开关:修改用户状态 scope.row代表当前用户 v-model视图改变数据改变
     async changeMgState (user) {
       // 发送请求 users/:uId/state/:type
       const res = await this.$http.put(
@@ -229,7 +264,7 @@ export default {
     // 编辑用户-显示对话框
     showeEditUserDia (user) {
       // 2.获取用户数据
-      console.log(user)
+      // console.log(user)
       this.form = user
       this.dialogFormVisibleEdit = true
     },
@@ -246,7 +281,7 @@ export default {
           // 1. data 中找userId
           // 2. 把userId 以 showDeleteMsgBox 参数形式传进来
           const res = await this.$http.delete(`users/${userId}`)
-          console.log(res)
+          // console.log(res)
           if (res.data.meta.status === 200) {
             // 1. 提示成功
             this.$message({
@@ -314,6 +349,7 @@ export default {
     handleSizeChange (val) {
       // console.log(`每页 ${val} 条`)
       this.pagesize = val
+      // 改变之后重新更新视图自动回到1
       // this.pagenum = 1
       this.getUserList()
     },
