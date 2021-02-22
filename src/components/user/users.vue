@@ -1,11 +1,7 @@
 <template>
   <el-card class="box-card">
     <!-- 1. 面包屑 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <my-bread level1="用户管理" level2="用户列表"></my-bread>
     <!-- 2. 搜索框 -->
     <el-row class="input-search">
       <el-col :span="12">
@@ -36,10 +32,10 @@
       ></el-table-column>
       <el-table-column prop="email" label="邮箱"> </el-table-column>
       <el-table-column prop="mobile" label="电话"> </el-table-column>
-      <el-table-column label="创建时间">
+      <el-table-column prop="create_time" label="创建时间">
         <!-- :formatter="formatter" -->
         <template slot-scope="scope">
-          {{ scope.row.create_time | fmtdate }}
+          {{ scope.row.create_time | formmatdate }}
         </template>
       </el-table-column>
       <el-table-column label="用户状态">
@@ -362,14 +358,12 @@ export default {
     // query查询参数可以为空 pagenum当前页码不能为空 pagesize每页显示条数不能为空
     // 获取用户列表的请求
     async getUserList () {
-      // 需要授权的 API ，必须在请求头中使用 `Authorization` 字段提供 `token` 令牌
-      const AUTH_TOKEN = localStorage.getItem('token')
-      this.$http.defaults.headers.common.Authorization = AUTH_TOKEN
-
+      // 需要授权的 API ，必须在请求头中使用 `Authorization` 字段提供 `token` 令牌设置在统一请求拦截器
       const res = await this.$http.get(
         `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`
       )
-      // console.log(res)
+      console.log(res)
+      console.log('更新用户')
       const {
         meta: { status, msg },
         data: { users, total }
