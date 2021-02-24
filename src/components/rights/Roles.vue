@@ -78,7 +78,7 @@
             circle
             size="small"
             plain
-            @click="showsetRoleRights(scope.row)"
+            @click="showSetRoleRights(scope.row)"
           ></el-button>
           <el-button
             type="danger"
@@ -100,6 +100,7 @@
     >
       <!-- 树形对话框-权限选择 -->
       <el-tree
+        ref="tree"
         :data="treelist"
         show-checkbox
         node-key="id"
@@ -110,7 +111,7 @@
       </el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRoleRightsDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="setRoleRightsDialogVisible = false"
+        <el-button type="primary" @click="setRoleRight(currRoleId)"
           >确 定</el-button
         >
       </span>
@@ -123,6 +124,7 @@ export default {
   name: 'roleS',
   data () {
     return {
+      currRoleId: '',
       arrcheck: [],
       treelist: [],
       roleslist: [],
@@ -137,8 +139,27 @@ export default {
     this.getRoleslist()
   },
   methods: {
+    // 修改权限- 发送请求
+    async setRoleRight (role) {
+      // - 请求路径：roles/:roleId/rights - 请求方法：post
+      const arr1 = this.$refs.tree.getCheckedKeys()
+      console.log(arr1)
+      const arr2 = this.$refs.tree.getHalfCheckedKeys()
+      console.log(arr2)
+      const arr = [...arr1, ...arr2]
+      const res = await this.$http.post(`roles/${this.currRoleId}/rights`, {
+        rids: arr.join(',')
+      })
+      console.log(res)
+      this.getRoleslist()
+      // 关闭对话框
+      this.setRoleRightsDialogVisible = false
+    },
     // 显示操作角色权限对话框 请求树形对话框权限数据
-    async showsetRoleRights (role) {
+    async showSetRoleRights (role) {
+      // 给 setRoleRight 方法所需要的角色id 赋值
+      console.log(role)
+      this.currRoleId = role.id
       const res = await this.$http.get('rights/tree')
       console.log(res)
       this.treelist = res.data.data
@@ -170,7 +191,7 @@ export default {
     async deleRight (roleId, rightId) {
       // - 请求路径：roles/:roleId/rights/:rightId
       // - 请求方法：delete
-      const res = await this.$$http.delete(`roles/${roleId}/rights/${rightId}`)
+      const res = await this.$http.delete(`roles/${roleId}/rights/${rightId}`)
       console.log(res)
       res.children = res.data.data
       // this.getRoleslist() 取消权限会返回取消后的权限，还可以只更新单行，没必要更新整个视图
