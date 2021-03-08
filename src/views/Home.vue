@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
-            <a href="#" class="login-out" @click.prevent="handleSignout()"
+            <a href="#" class="login-out" @click.prevent="handleSignout"
               >退出</a
             >
           </div>

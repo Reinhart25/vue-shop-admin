@@ -28,6 +28,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "lint-staged": "^9.5.0",
     "moment": "^2.29.1",
+    "vue-quill-editor": "^3.0.6",
     "vue-template-compiler": "^2.6.11"
   },
   "gitHooks": {

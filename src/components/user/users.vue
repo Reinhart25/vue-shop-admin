@@ -5,17 +5,8 @@
     <!-- 2. 搜索框 -->
     <el-row class="input-search">
       <el-col :span="12">
-        <el-input
-          placeholder="请输入内容"
-          v-model="query"
-          clearable
-          @clear="loadUserList"
-        >
-          <el-button
-            slot="append"
-            icon="el-icon-search"
-            @click="searchUser"
-          ></el-button>
+        <el-input placeholder="请输入内容" v-model="query" clearable @clear="loadUserList">
+          <el-button slot="append" icon="el-icon-search" @click="searchUser"></el-button>
         </el-input>
       </el-col>
       <el-col :span="2" class="btn-success">
@@ -25,11 +16,7 @@
     <!-- 3. 表格 -->
     <el-table :data="userlist" stripe style="width: 100%" highlight-current-row>
       <el-table-column type="index" label="#" width="80"> </el-table-column>
-      <el-table-column
-        prop="username"
-        label="姓名"
-        width="100"
-      ></el-table-column>
+      <el-table-column prop="username" label="姓名" width="100"></el-table-column>
       <el-table-column prop="email" label="邮箱"> </el-table-column>
       <el-table-column prop="mobile" label="电话"> </el-table-column>
       <el-table-column prop="create_time" label="创建时间">
@@ -40,54 +27,20 @@
       </el-table-column>
       <el-table-column label="用户状态">
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.mg_state"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            @change="changeMgState(scope.row)"
-          >
+          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949" @change="changeMgState(scope.row)">
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button
-            type="primary"
-            icon="el-icon-edit"
-            circle
-            size="small"
-            plain
-            @click="showeEditUserDia(scope.row)"
-          ></el-button>
-          <el-button
-            type="success"
-            icon="el-icon-check"
-            circle
-            size="small"
-            plain
-            @click="showSetUserRoleDia(scope.row)"
-          ></el-button>
-          <el-button
-            type="danger"
-            icon="el-icon-delete"
-            circle
-            size="small"
-            plain
-            @click="showDeleteMsgBox(scope.row.id)"
-          ></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle size="small" plain @click="showeEditUserDia(scope.row)"></el-button>
+          <el-button type="success" icon="el-icon-check" circle size="small" plain @click="showSetUserRoleDia(scope.row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" plain @click="showDeleteMsgBox(scope.row.id)"></el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 4. 分页 -->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagenum"
-      :page-sizes="[2, 4, 6, 8]"
-      :page-size="2"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    >
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagenum" :page-sizes="[2, 4, 6, 8]" :page-size="2" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
     <!-- 弹出对话框 -->
     <!-- 添加用户的对话框 -->
@@ -118,11 +71,7 @@
     <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
       <el-form :model="form">
         <el-form-item label="用户名" :label-width="formLabelWidth">
-          <el-input
-            disabled
-            v-model="form.username"
-            autocomplete="off"
-          ></el-input>
+          <el-input disabled v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" :label-width="formLabelWidth">
           <el-input v-model="form.email" autocomplete="off"></el-input>
@@ -150,12 +99,7 @@
           <!-- 如果select 的绑定的数据的值 和 option 的value一样，就会显示该option 的label值 -->
           <el-select v-model="currentRoleId" placeholder="请选择角色">
             <el-option label="请选择" :value="-1"></el-option>
-            <el-option
-              :label="item.roleName"
-              :value="item.id"
-              v-for="(item, i) in roles"
-              :key="i"
-            ></el-option>
+            <el-option :label="item.roleName" :value="item.id" v-for="(item, i) in roles" :key="i"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -234,7 +178,7 @@ export default {
       this.roles = res1.data.data
       // 1.  获取当前用户的角色id
       const res = await this.$http.get(`users/${user.id}`)
-      console.log(res)
+      // console.log(res)
       // 接口文档的key名 是role_id 其实是rid
       this.currentRoleId = res.data.data.rid
       this.dialogFormVisibleRole = true
@@ -362,8 +306,8 @@ export default {
       const res = await this.$http.get(
         `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`
       )
-      console.log(res)
-      console.log('更新用户')
+      // console.log(res)
+      // console.log('更新用户')
       const {
         meta: { status, msg },
         data: { users, total }
