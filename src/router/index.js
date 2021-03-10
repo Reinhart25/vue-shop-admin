@@ -7,47 +7,60 @@ import Rights from '@/components/rights/Rights.vue'
 import Roles from '@/components/rights/Roles.vue'
 import Goodslist from '@/components/goods/Goodslist.vue'
 import GoodsAdd from '@/components/goods/GoodsAdd.vue'
-import { Message } from 'element-ui'
+import Params from '@/components/goods/Cateparams.vue'
+import GoodsCate from '@/components/goods/GoodsCate.vue'
+
+import {
+  Message
+} from 'element-ui'
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: Home,
-    children: [
-      {
-        path: '/users',
-        name: 'users',
-        component: Users
-      },
-      {
-        path: '/rights',
-        name: 'rights',
-        component: Rights
-      },
-      {
-        path: '/roles',
-        name: 'roles',
-        component: Roles
-      },
-      {
-        path: '/goods',
-        name: 'goods',
-        component: Goodslist
-      },
-      {
-        path: '/goodsadd',
-        name: 'goodsAdd',
-        component: GoodsAdd
-      }
-    ]
+const routes = [{
+  path: '/',
+  name: 'home',
+  component: Home,
+  children: [{
+    path: '/users',
+    name: 'users',
+    component: Users
   },
   {
-    path: '/login',
-    name: 'login',
-    component: Login
+    path: '/rights',
+    name: 'rights',
+    component: Rights
+  },
+  {
+    path: '/roles',
+    name: 'roles',
+    component: Roles
+  },
+  {
+    path: '/goods',
+    name: 'goods',
+    component: Goodslist
+  },
+  {
+    path: '/goodsadd',
+    name: 'goodsAdd',
+    component: GoodsAdd
+  },
+  {
+    path: '/params',
+    name: 'params',
+    component: Params
+  },
+  {
+    path: '/categories',
+    name: 'categories',
+    component: GoodsCate
   }
+  ]
+},
+{
+  path: '/login',
+  name: 'login',
+  component: Login
+}
 ]
 
 const router = new VueRouter({
