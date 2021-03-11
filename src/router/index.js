@@ -9,6 +9,7 @@ import Goodslist from '@/components/goods/Goodslist.vue'
 import GoodsAdd from '@/components/goods/GoodsAdd.vue'
 import Params from '@/components/goods/Cateparams.vue'
 import GoodsCate from '@/components/goods/GoodsCate.vue'
+import Reports from '@/components/report/Reports.vue'
 
 import {
   Message
@@ -53,8 +54,12 @@ const routes = [{
     path: '/categories',
     name: 'categories',
     component: GoodsCate
-  }
-  ]
+  },
+  {
+    path: '/reports',
+    name: 'reports',
+    component: Reports
+  }]
 },
 {
   path: '/login',
