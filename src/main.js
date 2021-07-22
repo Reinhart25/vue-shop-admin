@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import ElementUI from 'element-ui'
+// 引入store
+import './store/index'
 import MyHttpServer from '@/plugins/http.js'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/css/base.css'

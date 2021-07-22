@@ -1,5 +1,6 @@
 // 插件模块
 import axios from 'axios'
+import { Message } from 'element-ui'
 
 const MyHttpServer = {}
 
@@ -29,16 +30,34 @@ MyHttpServer.install = Vue => {
     }
   )
 
-  // 添加响应拦截器
-  // axios.interceptors.response.use(
-  //   function (response) {
-  //     // 对响应数据做点什么
-  //     return response
-  //   },
-  //   function (error) {
-  //     // 对响应错误做点什么
-  //     return Promise.reject(error)
-  //   }
-  // )
+  /* 封装了响应拦截器 统一做处理 */
+  axios.interceptors.response.use((success) => {
+    // 在发送请求之前做些什么
+    if (success.status && success.status === 200) {
+      // 这些code 提示错误
+      if (success.data.code === 500 || success.data.code === 401 || success.data.code === 403) {
+        Message.error({ message: '警告哦，这是一条警告消息' })
+        return
+      }
+      // 有信息 类似修改成功这类 返回信息
+      if (success.data.message) {
+        Message.success({ message: success.data.message })
+      }
+    }
+    return success.data
+  }, (losing) => {
+    // 对请求错误做些什么
+    if (losing.response.code === 504 || losing.response.code === 404) {
+      Message.error({ message: ' 服务器当机了 ' })
+    } else if (losing.response.code === 403) {
+      Message.error({ message: '权限不足, 请联系管理员' })
+    } else if (losing.response.code === 401) {
+      Message.error({ message: '尚未登陆, 请登陆' })
+      this.$router.replace('/')
+    } else {
+      Message.error({ message: losing.response.data.message })
+    }
+    return losing
+  })
 }
 export default MyHttpServer
