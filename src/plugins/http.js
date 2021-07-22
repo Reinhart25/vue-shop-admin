@@ -44,7 +44,7 @@ MyHttpServer.install = Vue => {
         Message.success({ message: success.data.message })
       }
     }
-    return success.data
+    return success
   }, (losing) => {
     // 对请求错误做些什么
     if (losing.response.code === 504 || losing.response.code === 404) {

@@ -3,18 +3,18 @@ import VueRouter from 'vue-router'
 import Login from '@/components/login/Login.vue'
 import Home from '@/views/Home.vue'
 import Users from '@/components/user/Users.vue'
-import Rights from '@/components/rights/Rights.vue'
-import Roles from '@/components/rights/Roles.vue'
-import Goodslist from '@/components/goods/Goodslist.vue'
-import GoodsAdd from '@/components/goods/GoodsAdd.vue'
-import Params from '@/components/goods/Cateparams.vue'
-import GoodsCate from '@/components/goods/GoodsCate.vue'
-import Reports from '@/components/report/Reports.vue'
-
 // import {
 //   Message
 // } from 'element-ui'
 Vue.use(VueRouter)
+// 路由懒加载
+const Rights = () => import('@/components/rights/Rights')
+const Roles = () => import('@/components/rights/Roles')
+const Goodslist = () => import('@/components/goods/Goodslist')
+const GoodsAdd = () => import('@/components/goods/GoodsAdd')
+const Params = () => import('@/components/goods/Cateparams')
+const GoodsCate = () => import('@/components/goods/GoodsCate')
+const Reports = () => import('@/components/report/Reports')
 
 const routes = [
   {
