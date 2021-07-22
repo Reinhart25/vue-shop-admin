@@ -1,6 +1,9 @@
 <template>
   <div>
-    <my-bread></my-bread>
+    <my-bread
+      level1="权限管理"
+      level2="角色列表"
+    ></my-bread>
     <el-row class="addRole">
       <el-col>
         <el-button type="info">添加角色</el-button>
@@ -15,27 +18,35 @@
       highlight-current-row
     >
       <!-- 2.1 展开行 -->
-      <el-table-column type="expand" label="#" width="150">
+      <el-table-column
+        type="expand"
+        label="#"
+        width="150"
+      >
         <template slot-scope="scope">
-          <el-row v-for="(item1, i) in scope.row.children" :key="i">
+          <el-row
+            v-for="(item1, i) in scope.row.children"
+            :key="i"
+          >
             <el-col :span="4">
               <span v-if="scope.row.children.length === 0">该角色无权限</span>
               <el-tag
                 @close="deleRight(scope.row.id, item1.id)"
                 type="success"
                 closable
-                >{{ item1.authName }}</el-tag
-              >
+              >{{ item1.authName }}</el-tag>
             </el-col>
             <el-col :span="20">
-              <el-row v-for="(item2, i) in item1.children" :key="i">
+              <el-row
+                v-for="(item2, i) in item1.children"
+                :key="i"
+              >
                 <el-col :span="4">
                   <el-tag
                     @close="deleRight(scope.row.id, item2.id)"
                     type="info"
                     closable
-                    >{{ item2.authName }}</el-tag
-                  >
+                  >{{ item2.authName }}</el-tag>
                 </el-col>
                 <el-col :span="20">
                   <el-row>
@@ -47,7 +58,7 @@
                         :key="i"
                         type="warning"
                         closable
-                        >{{ item3.authName }}
+                      >{{ item3.authName }}
                       </el-tag>
                     </el-col>
                   </el-row>
@@ -57,12 +68,27 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column type="index" label="#" width="150"> </el-table-column>
-      <el-table-column prop="roleName" label="角色名称" width="200">
+      <el-table-column
+        type="index"
+        label="#"
+        width="150"
+      > </el-table-column>
+      <el-table-column
+        prop="roleName"
+        label="角色名称"
+        width="200"
+      >
       </el-table-column>
-      <el-table-column prop="roleDesc" label="角色描述" width="300">
+      <el-table-column
+        prop="roleDesc"
+        label="角色描述"
+        width="300"
+      >
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column
+        label="操作"
+        width="200"
+      >
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -109,11 +135,15 @@
         :props="defaultProps"
       >
       </el-tree>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="setRoleRightsDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="setRoleRight(currRoleId)"
-          >确 定</el-button
-        >
+        <el-button
+          type="primary"
+          @click="setRoleRight(currRoleId)"
+        >确 定</el-button>
       </span>
     </el-dialog>
   </div>

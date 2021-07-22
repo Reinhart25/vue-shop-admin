@@ -10,7 +10,7 @@ import moment from 'moment'
 import MyBread from '@/components/cuscom/MyBread.vue'
 
 // 把axios 加到Vue 原形对象，就可以使用this.axios 调用
-// Vue.prototype.axios = axios
+// Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

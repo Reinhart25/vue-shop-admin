@@ -13,9 +13,11 @@
       <el-form-item label="密码">
         <el-input v-model="formdata.password"></el-input>
       </el-form-item>
-      <el-button @click.prevent="handleLogin()" type="primary" class="login-btn"
-        >登录</el-button
-      >
+      <el-button
+        @click.prevent="handleLogin()"
+        type="primary"
+        class="login-btn"
+      >登录</el-button>
     </el-form>
   </div>
 </template>
@@ -51,7 +53,7 @@ export default {
         // 在登录成功时， 保存正确用户的token
         localStorage.setItem('token', data.token)
         // 1. 跳转home  js编程式导航
-        this.$router.push({ name: 'home' })
+        this.$router.push({ path: '/home' })
         //  2. 提示成功
         this.$message.success(msg)
         console.log(data)
@@ -61,29 +63,6 @@ export default {
         this.$message.warning(msg)
         console.log(data)
       }
-
-      // console.log(this.formdata)
-      // // axios#post(url[, data[, config]])
-      // this.$http.post('login', this.formdata).then(response => {
-      //   // console.log(response)
-      //   const {
-      //     data,
-      //     meta: { msg, status }
-      //   } = response.data
-      //   //  登录成功
-      //   if (status === 200) {
-      //     // 1. 跳转home  js编程式导航
-      //     this.$router.push({ name: 'home' })
-      //     //  2. 提示成功
-      //     this.$message.success(msg)
-      //     console.log(data)
-      //   } else {
-      //     // 不成功
-      //     // 1. 提示消息(哪不对)
-      //     this.$message.warning(msg)
-      //     console.log(data)
-      //   }
-      // })
     }
   }
 }

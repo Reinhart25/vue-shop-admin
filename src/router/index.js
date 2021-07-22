@@ -11,85 +11,95 @@ import Params from '@/components/goods/Cateparams.vue'
 import GoodsCate from '@/components/goods/GoodsCate.vue'
 import Reports from '@/components/report/Reports.vue'
 
-import {
-  Message
-} from 'element-ui'
+// import {
+//   Message
+// } from 'element-ui'
 Vue.use(VueRouter)
 
-const routes = [{
-  path: '/',
-  name: 'home',
-  component: Home,
-  children: [{
-    path: '/users',
-    name: 'users',
-    component: Users
+const routes = [
+  {
+    path: '/home',
+    name: 'home',
+    component: Home,
+    children: [
+      {
+        path: '/users',
+        name: 'users',
+        component: Users
+      },
+      {
+        path: '/rights',
+        name: 'rights',
+        component: Rights
+      },
+      {
+        path: '/roles',
+        name: 'roles',
+        component: Roles
+      },
+      {
+        path: '/goods',
+        name: 'goods',
+        component: Goodslist
+      },
+      {
+        path: '/goodsadd',
+        name: 'goodsAdd',
+        component: GoodsAdd
+      },
+      {
+        path: '/params',
+        name: 'params',
+        component: Params
+      },
+      {
+        path: '/categories',
+        name: 'categories',
+        component: GoodsCate
+      },
+      {
+        path: '/reports',
+        name: 'reports',
+        component: Reports
+      }
+    ]
   },
   {
-    path: '/rights',
-    name: 'rights',
-    component: Rights
+    path: '/login',
+    name: 'login',
+    component: Login
   },
   {
-    path: '/roles',
-    name: 'roles',
-    component: Roles
-  },
-  {
-    path: '/goods',
-    name: 'goods',
-    component: Goodslist
-  },
-  {
-    path: '/goodsadd',
-    name: 'goodsAdd',
-    component: GoodsAdd
-  },
-  {
-    path: '/params',
-    name: 'params',
-    component: Params
-  },
-  {
-    path: '/categories',
-    name: 'categories',
-    component: GoodsCate
-  },
-  {
-    path: '/reports',
-    name: 'reports',
-    component: Reports
-  }]
-},
-{
-  path: '/login',
-  name: 'login',
-  component: Login
-}
+    path: '/',
+    redirect: '/home'
+  }
 ]
-
+// redirect: '/home',
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
 
-router.beforeEach((to, from, next) => {
+/* router.beforeEach((to, from, next) => {
   // console.log(to, from)
   if (to.path === '/login') {
     next()
+    console.log('111111')
   } else {
     // 如果要去的不是登录 判断token
     const token = localStorage.getItem('token')
-    if (!token) {
-      Message.warning('请先登录')
-      router.push({
-        name: 'login'
-      })
-      return
-    }
+    console.log('----' + token)
+    // if (!token) {
+    //   Message.warning('请先登录')
+    //   router.push({
+    //     name: 'login'
+    //   })
+    //   return
+    // }
     next()
+    console.log('222222222')
   }
-})
+}) */
 
 export default router
