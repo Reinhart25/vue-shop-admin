@@ -34,9 +34,6 @@
     "vue-quill-editor": "^3.0.6",
     "vue-template-compiler": "^2.6.11"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
   "lint-staged": {
     "*.{js,jsx,vue}": [
       "vue-cli-service lint",
