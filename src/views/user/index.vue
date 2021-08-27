@@ -113,7 +113,7 @@
 
 <script>
 export default {
-  name: 'users',
+  name: 'User',
   data () {
     return {
       // 分配角色 初始值

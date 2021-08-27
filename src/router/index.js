@@ -1,77 +1,65 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '@/components/login/Login.vue'
-import Home from '@/views/Home.vue'
-import Users from '@/components/user/Users.vue'
+import LayOut from '@/layout'
 // import {
 //   Message
 // } from 'element-ui'
 Vue.use(VueRouter)
 // 路由懒加载
-const Rights = () => import('@/components/rights/Rights')
-const Roles = () => import('@/components/rights/Roles')
-const Goodslist = () => import('@/components/goods/Goodslist')
-const GoodsAdd = () => import('@/components/goods/GoodsAdd')
-const Params = () => import('@/components/goods/Cateparams')
-const GoodsCate = () => import('@/components/goods/GoodsCate')
-const Reports = () => import('@/components/report/Reports')
 
 const routes = [
   {
-    path: '/home',
-    name: 'home',
-    component: Home,
+    path: '/',
+    name: 'LayOut',
+    redirect: '/user',
+    component: LayOut,
     children: [
       {
-        path: '/users',
-        name: 'users',
-        component: Users
+        path: 'user',
+        name: 'user',
+        component: () => import('@/views/user')
       },
       {
-        path: '/rights',
+        path: 'rights',
         name: 'rights',
-        component: Rights
+        component: () => import('@/views/rights/Rights')
       },
       {
-        path: '/roles',
+        path: 'roles',
         name: 'roles',
-        component: Roles
+        component: () => import('@/views/rights/Roles')
       },
       {
-        path: '/goods',
+        path: 'goods',
         name: 'goods',
-        component: Goodslist
+        component: () => import('@/views/goods/Goodslist')
       },
       {
-        path: '/goodsadd',
+        path: 'goodsadd',
         name: 'goodsAdd',
-        component: GoodsAdd
+        component: () => import('@/views/goods/GoodsAdd')
       },
       {
         path: '/params',
         name: 'params',
-        component: Params
+        component: () => import('@/views/goods/Cateparams')
       },
       {
         path: '/categories',
         name: 'categories',
-        component: GoodsCate
+        component: () => import('@/views/goods/GoodsCate')
       },
       {
-        path: '/reports',
+        path: 'reports',
         name: 'reports',
-        component: Reports
+        component: () => import('@/views/report/Reports')
       }
     ]
   },
   {
     path: '/login',
     name: 'login',
-    component: Login
-  },
-  {
-    path: '/',
-    redirect: '/home'
+    component: () => import('@/views/login')
   }
 ]
 // redirect: '/home',

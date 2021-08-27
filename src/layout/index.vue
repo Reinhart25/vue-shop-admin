@@ -57,7 +57,7 @@
 <script>
 // @ is an alias to /src
 export default {
-  name: 'home',
+  name: 'LayOut',
   data () {
     return {
       menus: []

@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    routes: []
+    routes: [],
+    isCollapse: false
   },
   mutations: {
     // 定义 mutations
@@ -27,6 +28,9 @@ export default new Vuex.Store({
   getters: {
     showCount (state) {
       return '当前最新的数量是【' + state.count + '】'
+    },
+    isCollapse (state) {
+      return state.isCollapse
     }
   },
   modules: {
